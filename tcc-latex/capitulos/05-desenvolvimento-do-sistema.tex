@@ -1,0 +1,47 @@
+\chapter{Desenvolvimento do sistema}
+
+\section{Estrutura do firmware}
+
+O firmware foi organizado com separação entre tipos, configuração, monitoramento de bateria e
+lógica de controle. Essa divisão favorece manutenção, evolução e futura substituição do modo
+\textit{mock} por drivers reais de hardware.
+
+\section{Máquina de estados}
+
+A máquina de estados foi definida com os seguintes estados:
+
+\begin{itemize}
+  \item \textit{Startup};
+  \item \textit{Idle};
+  \item \textit{Charging};
+  \item \textit{Discharging};
+  \item \textit{Balancing};
+  \item \textit{Fault}.
+\end{itemize}
+
+Essa modelagem torna explícita a relação entre telemetria, falhas, saídas e transições do
+sistema.
+
+\section{Lógica de proteção}
+
+As proteções tratadas na base inicial do firmware incluem:
+
+\begin{itemize}
+  \item sobretensão por célula;
+  \item subtensão por célula;
+  \item sobrecorrente de carga;
+  \item sobrecorrente de descarga;
+  \item bloqueio térmico para carga e descarga;
+  \item falha de AFE.
+\end{itemize}
+
+\section{Balanceamento}
+
+O projeto adota, em sua primeira versão, balanceamento passivo. A lógica considera limiar de
+início de balanceamento e delta mínimo entre a célula de maior e a de menor tensão.
+
+\section{Estrutura de configuração em JSON}
+
+Os parâmetros do sistema foram organizados em arquivo JSON para permitir rastreabilidade e futura
+ligação com configuração persistente do firmware. Essa estrutura inclui parâmetros do pack,
+medição, proteção, balanceamento, saídas e telemetria.

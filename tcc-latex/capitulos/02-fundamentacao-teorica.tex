@@ -1,0 +1,57 @@
+\chapter{Fundamentação teórica}
+
+\section{Baterias de lítio em configuração 4S}
+
+Uma bateria em configuração \textit{4S} possui quatro células em série. Nesse arranjo, a tensão
+total do pack resulta da soma das tensões individuais das células, o que exige monitoramento
+por célula para evitar condições de sobretensão e subtensão.
+
+\section{Battery Management System}
+
+Um BMS é responsável por monitorar variáveis elétricas e térmicas do pack, proteger a bateria,
+gerenciar carga e descarga e manter a operação dentro de limites seguros \cite{andrea2010}.
+
+\section{Proteção em BMS}
+
+As proteções mais relevantes em BMS incluem:
+
+\begin{itemize}
+  \item sobretensão por célula;
+  \item subtensão por célula;
+  \item sobrecorrente de carga;
+  \item sobrecorrente de descarga;
+  \item curto-circuito;
+  \item sobretemperatura e subtemperatura.
+\end{itemize}
+
+Segundo Andrea \cite{andrea2010}, a robustez da proteção depende de uma combinação de hardware
+dedicado e lógica de controle, especialmente em sistemas multicélula.
+
+\section{Balanceamento de células}
+
+O balanceamento busca reduzir a divergência entre tensões individuais das células. Entre as
+estratégias possíveis, o balanceamento passivo é uma das mais comuns em aplicações de menor
+complexidade, por dissipar energia das células mais carregadas em resistores de bleed
+\cite{plett2015v2}.
+
+\section{Analog Front End em BMS}
+
+O \textit{Analog Front End} é o bloco responsável pela leitura segura de tensões, correntes e
+temperaturas, além de frequentemente incorporar mecanismos de detecção de falhas e suporte a
+balanceamento. Em sistemas reais, o AFE reduz a dependência do ADC do microcontrolador e
+melhora a confiabilidade da proteção \cite{ti_bq76920,ad_passive_balancing}.
+
+\section{Microcontroladores na supervisão da BMS}
+
+O microcontrolador pode assumir as tarefas de:
+
+\begin{itemize}
+  \item supervisão de alto nível;
+  \item telemetria;
+  \item máquina de estados;
+  \item registro de falhas;
+  \item comunicação com interfaces externas.
+\end{itemize}
+
+No contexto deste trabalho, o ESP32-S3 foi escolhido por sua capacidade de processamento,
+interfaces de comunicação e potencial de conectividade sem fio.

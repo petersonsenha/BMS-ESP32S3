@@ -1,0 +1,55 @@
+\chapter{Arquitetura da BMS 4S}
+
+\section{Visão geral do sistema}
+
+A arquitetura proposta divide a solução em três camadas principais:
+
+\begin{itemize}
+  \item camada de medição e proteção primária;
+  \item camada de controle e supervisão;
+  \item camada de potência e comutação.
+\end{itemize}
+
+\section{Arquitetura de hardware}
+
+Os blocos de hardware propostos são:
+
+\begin{itemize}
+  \item pack de células 4S;
+  \item AFE dedicado;
+  \item resistor shunt para medição de corrente;
+  \item sensores NTC;
+  \item MOSFET de carga;
+  \item MOSFET de descarga;
+  \item resistores de balanceamento;
+  \item fusível.
+\end{itemize}
+
+\section{Papel do AFE}
+
+O AFE ocupa posição central na arquitetura, pois fornece medição multicélula, suporte à proteção
+e interface segura com o microcontrolador. Para uma arquitetura 4S, famílias como a BQ76920
+apresentam bom alinhamento com os requisitos de medição e proteção \cite{ti_bq76920}.
+
+\section{Papel do ESP32-S3}
+
+O ESP32-S3 foi definido como controlador de alto nível, responsável por:
+
+\begin{itemize}
+  \item ler a telemetria consolidada;
+  \item executar a máquina de estados;
+  \item tratar falhas;
+  \item controlar os caminhos de potência;
+  \item expor interfaces de monitoramento e configuração.
+\end{itemize}
+
+\section{Estágio de potência}
+
+O estágio de potência prevê caminhos distintos para carga e descarga. Essa separação facilita
+o bloqueio seletivo de eventos de falha conforme o tipo de condição detectada.
+
+\section{Sensoriamento de corrente e temperatura}
+
+O sensoriamento de corrente é realizado por resistor shunt, enquanto a monitoração térmica
+utiliza, no mínimo, dois termistores NTC: um próximo às células e outro próximo ao estágio
+de potência.

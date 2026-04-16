@@ -1,0 +1,56 @@
+\chapter{Introdução}
+
+\section{Contextualização}
+
+O uso de baterias de íons de lítio em sistemas embarcados, mobilidade elétrica, armazenamento
+de energia e equipamentos portáteis tem crescido de forma significativa nas últimas décadas.
+Com esse crescimento, aumenta também a necessidade de sistemas de gerenciamento de baterias
+(\textit{Battery Management Systems} -- BMS) capazes de monitorar, proteger e operar os packs
+de forma segura \cite{andrea2010,plett2015v1}.
+
+\section{Problema de pesquisa}
+
+Em packs multicélula, como no caso de uma bateria \textit{4S}, a simples leitura da tensão total
+do pack não é suficiente para garantir segurança operacional. É necessário monitorar cada célula
+individualmente, acompanhar temperatura, corrente e estados de falha, além de aplicar estratégias
+de proteção e balanceamento.
+
+\section{Objetivo geral}
+
+Desenvolver a proposta de uma BMS para bateria de lítio em configuração \textit{4S}, utilizando
+um ESP32-S3 como unidade de supervisão e um \textit{Analog Front End} dedicado para medição e
+proteção primária do pack.
+
+\section{Objetivos específicos}
+
+\begin{itemize}
+  \item identificar os requisitos de proteção de uma BMS para pack 4S;
+  \item analisar o papel do AFE em sistemas de gerenciamento de baterias;
+  \item propor a arquitetura de hardware da solução;
+  \item estruturar a máquina de estados e a lógica de proteção do firmware;
+  \item organizar uma base de documentação e configuração para futura implementação física.
+\end{itemize}
+
+\section{Justificativa}
+
+A relevância do tema se apoia na necessidade de segurança, robustez e rastreabilidade em sistemas
+com células de lítio. Uma BMS mal projetada pode causar degradação precoce do pack, perda de
+desempenho e, em casos severos, risco elétrico e térmico.
+
+\section{Metodologia}
+
+Este trabalho adota uma abordagem de pesquisa aplicada, de natureza tecnológica, combinando:
+
+\begin{itemize}
+  \item revisão bibliográfica sobre BMS, AFE e proteção de packs de lítio;
+  \item análise de arquiteturas e componentes de mercado;
+  \item modelagem da solução para uma BMS 4S;
+  \item estruturação inicial do firmware e da documentação técnica.
+\end{itemize}
+
+\section{Estrutura do trabalho}
+
+Este trabalho está organizado em sete capítulos. Após esta introdução, o Capítulo 2 apresenta
+a fundamentação teórica. O Capítulo 3 descreve os requisitos e a metodologia. O Capítulo 4
+apresenta a arquitetura proposta. O Capítulo 5 detalha o desenvolvimento da solução. O
+Capítulo 6 discute os resultados e limitações. Por fim, o Capítulo 7 apresenta a conclusão.
