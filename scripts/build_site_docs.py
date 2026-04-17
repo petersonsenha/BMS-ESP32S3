@@ -30,6 +30,8 @@ MANUAL_PAGE_TARGETS = {
 MARKDOWN_LINK_RE = re.compile(r"(!?)\[([^\]]+)\]\(([^)]+)\)")
 WIKI_LINK_RE = re.compile(r"\[\[([^\]|#]+)(?:#([^\]|]+))?(?:\|([^\]]+))?\]\]")
 WINDOWS_ABS_RE = re.compile(r"^/?[A-Za-z]:/")
+LATEX_INLINE_COMMAND_RE = re.compile(r"\\(textit|textbf|texttt)\{([^{}]+)\}")
+LATEX_COMMAND_WITH_ARG_RE = re.compile(r"\\([a-zA-Z*]+)\{([^{}]*)\}")
 
 
 def slugify_name(name: str) -> str:
@@ -81,6 +83,7 @@ CANVAS_MAP = {
 
 PROJECT_CONFIG_PAGE = Path("projeto/configuracao-json.md")
 TCC_TEMPLATE_PAGE = Path("academico/template-latex.md")
+TCC_WEB_PAGE = Path("academico/tcc-do-projeto.md")
 GITHUB_PAGES_PAGE = Path("projeto/publicacao-github-pages.md")
 KNOWLEDGE_MAPS_PAGE = Path("conhecimento/mapas-relacionais.md")
 
@@ -237,6 +240,284 @@ def render_markdown_page(source_path: Path, target_path: Path) -> None:
     destination.write_text(rewritten, encoding="utf-8")
 
 
+def extract_tex_command(text: str, command: str) -> str:
+    match = re.search(rf"\\{command}\{{([\s\S]*?)\}}", text)
+    return match.group(1).strip() if match else ""
+
+
+def extract_tex_environment(text: str, environment: str, options: str = "") -> str:
+    pattern = rf"\\begin\{{{environment}\}}{options}([\s\S]*?)\\end\{{{environment}\}}"
+    match = re.search(pattern, text)
+    return match.group(1).strip() if match else ""
+
+
+def maybe_fix_mojibake(text: str) -> str:
+    if "Ã" not in text and "Â" not in text:
+        return text
+
+    try:
+        return text.encode("latin-1").decode("utf-8")
+    except UnicodeError:
+        return text
+
+
+def parse_bib_entries(bib_text: str) -> dict[str, dict[str, str]]:
+    entries: dict[str, dict[str, str]] = {}
+    for match in re.finditer(r"@(\w+)\{([^,]+),([\s\S]*?)\n\}", bib_text):
+        entry_type = match.group(1).strip()
+        key = match.group(2).strip()
+        body = match.group(3)
+        fields = {"type": entry_type}
+        for field_match in re.finditer(r"(\w+)\s*=\s*\{([\s\S]*?)\}", body):
+            fields[field_match.group(1).strip().lower()] = " ".join(field_match.group(2).split())
+        entries[key] = fields
+    return entries
+
+
+def citation_label(key: str, bib_entries: dict[str, dict[str, str]]) -> str:
+    entry = bib_entries.get(key, {})
+    author = entry.get("author", key)
+    year = entry.get("year", "s.d.")
+    author = author.replace("{", "").replace("}", "")
+    short_author = author.split(" and ")[0].split(",")[0].strip()
+    return f"{short_author}, {year}"
+
+
+def replace_citations(text: str, bib_entries: dict[str, dict[str, str]]) -> str:
+    def replacement(match: re.Match[str]) -> str:
+        keys = [key.strip() for key in match.group(2).split(",") if key.strip()]
+        rendered = [
+            f"[{citation_label(key, bib_entries)}](#ref-{slugify_name(key)})"
+            for key in keys
+        ]
+        if not rendered:
+            return ""
+        return f" ({'; '.join(rendered)})"
+
+    return re.sub(r"\\(cite|citeonline)\{([^}]+)\}", replacement, text)
+
+
+def replace_inline_latex(text: str) -> str:
+    previous = ""
+    current = text
+    while previous != current:
+        previous = current
+
+        def inline_replacement(match: re.Match[str]) -> str:
+            command = match.group(1)
+            value = match.group(2)
+            if command == "textbf":
+                return f"**{value}**"
+            if command == "texttt":
+                return f"`{value}`"
+            return f"*{value}*"
+
+        current = LATEX_INLINE_COMMAND_RE.sub(inline_replacement, current)
+
+    return current
+
+
+def convert_latex_lists(text: str) -> str:
+    def replace_environment(environment: str, marker: str) -> None:
+        nonlocal text
+
+        pattern = re.compile(
+            rf"\\begin\{{{environment}\}}([\s\S]*?)\\end\{{{environment}\}}",
+            re.MULTILINE,
+        )
+
+        def env_replacement(match: re.Match[str]) -> str:
+            body = match.group(1).strip()
+            items = re.findall(r"\\item\s+([\s\S]*?)(?=(\\item|$))", body)
+            lines = []
+            for item_text, _ in items:
+                item_text = " ".join(item_text.strip().split())
+                if item_text:
+                    lines.append(f"{marker} {item_text}")
+            return "\n".join(lines)
+
+        text = pattern.sub(env_replacement, text)
+
+    replace_environment("itemize", "-")
+    replace_environment("enumerate", "1.")
+    return text
+
+
+def cleanup_latex_text(text: str) -> str:
+    cleaned = text
+    cleaned = cleaned.replace(r"\textit", r"\textit")
+    cleaned = cleaned.replace(r"\_", "_")
+    cleaned = cleaned.replace(r"\%", "%")
+    cleaned = cleaned.replace(r"\&", "&")
+    cleaned = cleaned.replace(r"~", " ")
+    cleaned = cleaned.replace(r"``", '"').replace(r"''", '"')
+    cleaned = cleaned.replace(r"\ ", " ")
+    cleaned = re.sub(r"\\begin\{otherlanguage\*\}\{[^}]+\}", "", cleaned)
+    cleaned = cleaned.replace(r"\end{otherlanguage*}", "")
+    cleaned = replace_inline_latex(cleaned)
+    cleaned = convert_latex_lists(cleaned)
+    cleaned = re.sub(r"\\chapter\{([^}]+)\}", r"## \1", cleaned)
+    cleaned = re.sub(r"\\section\{([^}]+)\}", r"### \1", cleaned)
+    cleaned = re.sub(r"\\subsection\{([^}]+)\}", r"#### \1", cleaned)
+    cleaned = re.sub(r"\\partapendices|\\partanexos", "", cleaned)
+    cleaned = re.sub(r"\\chapter\*\{([^}]+)\}", r"## \1", cleaned)
+    cleaned = re.sub(r"\\[a-zA-Z]+\*?(?:\[[^\]]*\])?\{[^{}]*\}", "", cleaned)
+    cleaned = re.sub(r"\\[a-zA-Z]+\*?", "", cleaned)
+    cleaned = re.sub(r"\n{3,}", "\n\n", cleaned)
+    return cleaned.strip()
+
+
+def format_bib_entry(key: str, entry: dict[str, str]) -> str:
+    parts = []
+    if author := entry.get("author"):
+        parts.append(author.replace("{", "").replace("}", ""))
+    if title := entry.get("title"):
+        parts.append(f"*{title}*")
+    edition = entry.get("edition")
+    publisher = entry.get("publisher")
+    address = entry.get("address")
+    year = entry.get("year")
+    note = entry.get("note")
+    url = entry.get("url")
+
+    trailing = ", ".join([value for value in [edition and f"{edition} ed.", publisher, address, year] if value])
+    if trailing:
+        parts.append(trailing)
+    if note:
+        parts.append(note)
+    if url:
+        parts.append(url)
+
+    return " ".join(parts)
+
+
+def render_tcc_web_page() -> None:
+    main_tex = maybe_fix_mojibake((ROOT / "tcc-latex" / "main.tex").read_text(encoding="utf-8"))
+    bib_text = maybe_fix_mojibake((ROOT / "tcc-latex" / "referencias.bib").read_text(encoding="utf-8"))
+    bib_entries = parse_bib_entries(bib_text)
+
+    title = extract_tex_command(main_tex, "title")
+    author = extract_tex_command(main_tex, "author")
+    local = extract_tex_command(main_tex, "local")
+    year = extract_tex_command(main_tex, "date")
+    institution = extract_tex_command(main_tex, "instituicao").lstrip("%").strip().replace("\\\\", "<br>")
+    work_type = extract_tex_command(main_tex, "tipotrabalho")
+    preamble = extract_tex_command(main_tex, "preambulo")
+    advisor = extract_tex_command(main_tex, "orientador")
+    coadvisor = extract_tex_command(main_tex, "coorientador")
+
+    resumo = cleanup_latex_text(replace_citations(extract_tex_environment(main_tex, "resumo"), bib_entries))
+    abstract = cleanup_latex_text(
+        replace_citations(extract_tex_environment(main_tex, "resumo", r"\[Abstract\]"), bib_entries)
+    )
+
+    chapter_paths = [
+        ROOT / "tcc-latex" / "capitulos" / "01-introducao.tex",
+        ROOT / "tcc-latex" / "capitulos" / "02-fundamentacao-teorica.tex",
+        ROOT / "tcc-latex" / "capitulos" / "03-requisitos-e-metodologia.tex",
+        ROOT / "tcc-latex" / "capitulos" / "04-arquitetura-da-bms.tex",
+        ROOT / "tcc-latex" / "capitulos" / "05-desenvolvimento-do-sistema.tex",
+        ROOT / "tcc-latex" / "capitulos" / "06-resultados-e-discussao.tex",
+        ROOT / "tcc-latex" / "capitulos" / "07-conclusao.tex",
+    ]
+
+    rendered_chapters = []
+    chapter_titles = []
+    for chapter_path in chapter_paths:
+        chapter_text = maybe_fix_mojibake(chapter_path.read_text(encoding="utf-8"))
+        chapter_text = replace_citations(chapter_text, bib_entries)
+        chapter_markdown = cleanup_latex_text(chapter_text)
+        chapter_heading_match = re.search(r"^##\s+(.+)$", chapter_markdown, re.MULTILINE)
+        if chapter_heading_match:
+            chapter_title = chapter_heading_match.group(1).strip()
+            chapter_titles.append(chapter_title)
+            chapter_markdown = f'<a id="{rewrite_anchor(chapter_title).lstrip("#")}"></a>\n\n{chapter_markdown}'
+        rendered_chapters.append(chapter_markdown)
+
+    appendix = cleanup_latex_text(
+        replace_citations(
+            extract_tex_environment(main_tex, "apendicesenv"),
+            bib_entries,
+        )
+    )
+    annex = cleanup_latex_text(
+        replace_citations(
+            extract_tex_environment(main_tex, "anexosenv"),
+            bib_entries,
+        )
+    )
+
+    references_markdown = "\n".join(
+        f'- <a id="ref-{slugify_name(key)}"></a>`{key}`: {format_bib_entry(key, entry)}'
+        for key, entry in bib_entries.items()
+    )
+
+    summary_markdown = "\n".join(
+        f"1. [{chapter_title}]({rewrite_anchor(chapter_title)})"
+        for chapter_title in chapter_titles
+    )
+
+    content = f"""<div class="thesis-cover">
+  <p class="thesis-kicker">{work_type}</p>
+  <h1>{title}</h1>
+  <div class="thesis-meta">
+    <p><strong>Autor:</strong> {author}</p>
+    <p><strong>Local:</strong> {local}</p>
+    <p><strong>Ano:</strong> {year}</p>
+    <p><strong>Orientador:</strong> {advisor}</p>
+    <p><strong>Coorientador:</strong> {coadvisor}</p>
+  </div>
+  <p class="thesis-preamble">{preamble}</p>
+  <p class="thesis-institution">{institution}</p>
+</div>
+
+# TCC do projeto
+
+Esta pagina apresenta a versao web da monografia do projeto, montada a partir do template em
+`abnTeX2` e dos capitulos ja preparados em `tcc-latex/`.
+
+## Elementos pre-textuais
+
+### Resumo
+
+{resumo}
+
+### Abstract
+
+{abstract}
+
+## Sumario
+
+{summary_markdown}
+
+## Texto completo
+
+{"\n\n".join(rendered_chapters)}
+
+## Apendice
+
+{appendix}
+
+## Anexo
+
+{annex}
+
+## Referencias
+
+{references_markdown}
+
+## Arquivos de origem
+
+- [Template principal em LaTeX](../assets/tcc-latex/main.tex)
+- [Bibliografia BibTeX](../assets/tcc-latex/referencias.bib)
+- [Guia de TCC e ABNT](monografia-tcc-abnt.md)
+"""
+
+    destination = SITE_DOCS / TCC_WEB_PAGE
+    ensure_parent(destination)
+    destination.write_text(content, encoding="utf-8")
+
+
 def render_config_page() -> None:
     config_source = ROOT / "config" / "bms_config.json"
     config_text = config_source.read_text(encoding="utf-8")
@@ -380,6 +661,7 @@ def build_site_docs() -> None:
     render_config_page()
     render_github_pages_page()
     render_knowledge_maps_page()
+    render_tcc_web_page()
 
 
 if __name__ == "__main__":

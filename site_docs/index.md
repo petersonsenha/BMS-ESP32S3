@@ -8,7 +8,7 @@
   <div class="hero-actions">
     <a class="md-button md-button--primary" href="projeto/visao-geral/">Explorar o projeto</a>
     <a class="md-button" href="projeto/afe-em-bms/">Estudar o AFE</a>
-    <a class="md-button" href="academico/monografia-tcc-abnt/">Ver estrutura de TCC</a>
+    <a class="md-button" href="academico/tcc-do-projeto/">Ler o TCC</a>
     <a class="md-button" href="https://github.com/petersonsenha/BMS-ESP32S3">Abrir repositorio</a>
   </div>
 </div>
@@ -77,9 +77,9 @@
 
   ---
 
-  Estrutura de monografia, referencias em ABNT e template LaTeX usando abnTeX2.
+  Monografia web do projeto, guia ABNT e template LaTeX usando abnTeX2.
 
-  [Abrir TCC](academico/monografia-tcc-abnt.md)
+  [Abrir TCC](academico/tcc-do-projeto.md)
 
 </div>
 
@@ -90,7 +90,7 @@
 3. Se o foco for hardware, aprofunde em [AFE em BMS](projeto/afe-em-bms.md) e no [Esquematico logico](conhecimento/hardware/esquematico-logico-bms-4s.md).
 4. Se o foco for firmware, siga para [Maquina de estados](projeto/maquina-de-estados-bms.md) e [Configuracao JSON](projeto/configuracao-json.md).
 5. Para os mapas relacionais, abra [Mapas relacionais](conhecimento/mapas-relacionais.md).
-6. Para pesquisa ou TCC, feche com [TCC e ABNT](academico/monografia-tcc-abnt.md) e [Template LaTeX](academico/template-latex.md).
+6. Para pesquisa ou TCC, siga para [TCC do projeto](academico/tcc-do-projeto.md), depois [TCC e ABNT](academico/monografia-tcc-abnt.md) e [Template LaTeX](academico/template-latex.md).
 
 ## Destaques de engenharia
 

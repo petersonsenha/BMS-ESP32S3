@@ -3,6 +3,8 @@
 Esta pagina organiza o material academico do projeto para quem quiser transformar a documentacao
 tecnica em uma monografia com `abnTeX2`.
 
+Se voce quer ler o trabalho diretamente no navegador, comece por [TCC do projeto](tcc-do-projeto.md).
+
 ## O que esta pronto
 
 - estrutura base de TCC em `abnTeX2`
