@@ -28,6 +28,7 @@ jobs:
         with:
           python-version: "3.13"
           cache: pip
+          # The dependency file uses a custom name, so the cache key must point to it explicitly.
           cache-dependency-path: requirements-docs.txt
 
       - name: Configure Pages
