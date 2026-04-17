@@ -1,0 +1,52 @@
+\chapter{Requisitos e metodologia do projeto}
+
+\section{Requisitos funcionais}
+
+Para a proposta da BMS 4S, consideram-se como requisitos funcionais:
+
+\begin{itemize}
+  \item leitura da tensão individual das quatro células;
+  \item leitura de corrente do pack;
+  \item leitura de temperatura por sensores NTC;
+  \item controle independente dos caminhos de carga e descarga;
+  \item suporte a balanceamento passivo;
+  \item disponibilização de telemetria do pack.
+\end{itemize}
+
+\section{Requisitos de segurança}
+
+Como requisitos de segurança, destacam-se:
+
+\begin{itemize}
+  \item bloqueio por sobretensão;
+  \item bloqueio por subtensão;
+  \item bloqueio por sobrecorrente;
+  \item resposta segura em condição de curto-circuito;
+  \item bloqueio por sobretemperatura;
+  \item comportamento \textit{fail-safe} em caso de falha crítica.
+\end{itemize}
+
+\section{Parâmetros de configuração}
+
+Os parâmetros iniciais do sistema são organizados em uma estrutura de configuração contendo:
+
+\begin{itemize}
+  \item características do pack;
+  \item parâmetros de medição;
+  \item limites de proteção;
+  \item estratégia de balanceamento;
+  \item convenções de telemetria.
+\end{itemize}
+
+\section{Metodologia de desenvolvimento}
+
+A metodologia adotada foi composta por:
+
+\begin{enumerate}
+  \item levantamento bibliográfico;
+  \item análise de AFEs e arquiteturas de mercado;
+  \item definição dos requisitos do sistema;
+  \item modelagem da arquitetura de hardware;
+  \item modelagem da máquina de estados;
+  \item implementação da base inicial de firmware.
+\end{enumerate}

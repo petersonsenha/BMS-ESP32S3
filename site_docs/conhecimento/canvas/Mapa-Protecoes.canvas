@@ -1,0 +1,179 @@
+{
+  "nodes": [
+    {
+      "id": "group-prot",
+      "type": "group",
+      "x": -80,
+      "y": -80,
+      "width": 1820,
+      "height": 980,
+      "color": "1",
+      "label": "Mapa de Protecoes"
+    },
+    {
+      "id": "moc-prot",
+      "type": "file",
+      "file": "knowledge/00-MOCs/MOC-Protecoes.md",
+      "x": 80,
+      "y": 80,
+      "width": 320,
+      "height": 220,
+      "color": "4"
+    },
+    {
+      "id": "ov",
+      "type": "file",
+      "file": "knowledge/30-Protecoes/Sobretensao.md",
+      "x": 480,
+      "y": 80,
+      "width": 280,
+      "height": 180,
+      "color": "2"
+    },
+    {
+      "id": "uv",
+      "type": "file",
+      "file": "knowledge/30-Protecoes/Subtensao.md",
+      "x": 800,
+      "y": 80,
+      "width": 280,
+      "height": 180,
+      "color": "3"
+    },
+    {
+      "id": "oc",
+      "type": "file",
+      "file": "knowledge/30-Protecoes/Sobrecorrente.md",
+      "x": 1120,
+      "y": 80,
+      "width": 300,
+      "height": 180,
+      "color": "1"
+    },
+    {
+      "id": "sc",
+      "type": "file",
+      "file": "knowledge/30-Protecoes/Curto-Circuito.md",
+      "x": 1440,
+      "y": 80,
+      "width": 300,
+      "height": 180,
+      "color": "1"
+    },
+    {
+      "id": "ot",
+      "type": "file",
+      "file": "knowledge/30-Protecoes/Sobretemperatura.md",
+      "x": 640,
+      "y": 360,
+      "width": 320,
+      "height": 180,
+      "color": "2"
+    },
+    {
+      "id": "fs",
+      "type": "file",
+      "file": "knowledge/30-Protecoes/Fail-Safe.md",
+      "x": 1040,
+      "y": 360,
+      "width": 320,
+      "height": 180,
+      "color": "6"
+    },
+    {
+      "id": "fh",
+      "type": "file",
+      "file": "knowledge/40-Firmware/Fault-Handling.md",
+      "x": 840,
+      "y": 660,
+      "width": 360,
+      "height": 200,
+      "color": "5"
+    },
+    {
+      "id": "legend",
+      "type": "text",
+      "text": "# Leitura do mapa\n\n- topo: falhas primarias\n- meio: protecoes complementares\n- base: consolidacao de resposta no firmware",
+      "x": 80,
+      "y": 400,
+      "width": 360,
+      "height": 220,
+      "color": "5"
+    }
+  ],
+  "edges": [
+    {
+      "id": "p1",
+      "fromNode": "moc-prot",
+      "toNode": "ov",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "p2",
+      "fromNode": "moc-prot",
+      "toNode": "uv",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "p3",
+      "fromNode": "moc-prot",
+      "toNode": "ot",
+      "fromSide": "bottom",
+      "toSide": "left"
+    },
+    {
+      "id": "p4",
+      "fromNode": "oc",
+      "toNode": "sc",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "evento rapido"
+    },
+    {
+      "id": "p5",
+      "fromNode": "ov",
+      "toNode": "fh",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "p6",
+      "fromNode": "uv",
+      "toNode": "fh",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "p7",
+      "fromNode": "oc",
+      "toNode": "fh",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "p8",
+      "fromNode": "sc",
+      "toNode": "fs",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "estado seguro"
+    },
+    {
+      "id": "p9",
+      "fromNode": "ot",
+      "toNode": "fh",
+      "fromSide": "bottom",
+      "toSide": "left"
+    },
+    {
+      "id": "p10",
+      "fromNode": "fs",
+      "toNode": "fh",
+      "fromSide": "bottom",
+      "toSide": "right",
+      "label": "guardas"
+    }
+  ]
+}

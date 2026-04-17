@@ -1,0 +1,266 @@
+{
+  "nodes": [
+    {
+      "id": "group-schematic",
+      "type": "group",
+      "x": -80,
+      "y": -80,
+      "width": 2340,
+      "height": 1280,
+      "color": "5",
+      "label": "Mapa Esquematico Logico BMS 4S"
+    },
+    {
+      "id": "schematic-note",
+      "type": "file",
+      "file": "knowledge/20-Hardware/Esquematico-Logico-BMS-4S.md",
+      "x": 60,
+      "y": 60,
+      "width": 360,
+      "height": 220,
+      "color": "4"
+    },
+    {
+      "id": "pack",
+      "type": "file",
+      "file": "knowledge/10-Conceitos/Bateria-4S.md",
+      "x": 520,
+      "y": 80,
+      "width": 300,
+      "height": 180,
+      "color": "3"
+    },
+    {
+      "id": "fuse",
+      "type": "file",
+      "file": "knowledge/20-Hardware/Fusivel.md",
+      "x": 900,
+      "y": 80,
+      "width": 280,
+      "height": 180,
+      "color": "1"
+    },
+    {
+      "id": "charge-fet",
+      "type": "file",
+      "file": "knowledge/20-Hardware/MOSFET-de-Carga.md",
+      "x": 1260,
+      "y": 80,
+      "width": 300,
+      "height": 180,
+      "color": "2"
+    },
+    {
+      "id": "discharge-fet",
+      "type": "file",
+      "file": "knowledge/20-Hardware/MOSFET-de-Descarga.md",
+      "x": 1620,
+      "y": 80,
+      "width": 320,
+      "height": 180,
+      "color": "2"
+    },
+    {
+      "id": "shunt",
+      "type": "file",
+      "file": "knowledge/20-Hardware/Shunt.md",
+      "x": 1060,
+      "y": 360,
+      "width": 300,
+      "height": 180,
+      "color": "5"
+    },
+    {
+      "id": "afe",
+      "type": "file",
+      "file": "knowledge/10-Conceitos/AFE.md",
+      "x": 520,
+      "y": 360,
+      "width": 300,
+      "height": 180,
+      "color": "4"
+    },
+    {
+      "id": "ntc",
+      "type": "file",
+      "file": "knowledge/20-Hardware/NTC.md",
+      "x": 700,
+      "y": 660,
+      "width": 280,
+      "height": 180,
+      "color": "2"
+    },
+    {
+      "id": "esp32",
+      "type": "file",
+      "file": "knowledge/10-Conceitos/ESP32-S3.md",
+      "x": 1260,
+      "y": 660,
+      "width": 320,
+      "height": 180,
+      "color": "6"
+    },
+    {
+      "id": "state-machine",
+      "type": "file",
+      "file": "knowledge/40-Firmware/Maquina-de-Estados.md",
+      "x": 1660,
+      "y": 660,
+      "width": 320,
+      "height": 180,
+      "color": "6"
+    },
+    {
+      "id": "fault-handling",
+      "type": "file",
+      "file": "knowledge/40-Firmware/Fault-Handling.md",
+      "x": 1660,
+      "y": 960,
+      "width": 320,
+      "height": 180,
+      "color": "1"
+    },
+    {
+      "id": "config",
+      "type": "file",
+      "file": "knowledge/40-Firmware/Configuracao-BMS.md",
+      "x": 1060,
+      "y": 960,
+      "width": 320,
+      "height": 200,
+      "color": "5"
+    },
+    {
+      "id": "legend",
+      "type": "text",
+      "text": "# Leitura do mapa\n\n- topo: energia e comutacao\n- meio: medicao\n- base: controle e regras\n- bloco de configuracao: ponte para o JSON",
+      "x": 60,
+      "y": 420,
+      "width": 340,
+      "height": 240,
+      "color": "5"
+    }
+  ],
+  "edges": [
+    {
+      "id": "s1",
+      "fromNode": "schematic-note",
+      "toNode": "pack",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "origem"
+    },
+    {
+      "id": "s2",
+      "fromNode": "pack",
+      "toNode": "fuse",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "protecao fisica"
+    },
+    {
+      "id": "s3",
+      "fromNode": "fuse",
+      "toNode": "charge-fet",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "caminho de carga"
+    },
+    {
+      "id": "s4",
+      "fromNode": "charge-fet",
+      "toNode": "discharge-fet",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "potencia"
+    },
+    {
+      "id": "s5",
+      "fromNode": "pack",
+      "toNode": "afe",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "taps das celulas"
+    },
+    {
+      "id": "s6",
+      "fromNode": "shunt",
+      "toNode": "afe",
+      "fromSide": "left",
+      "toSide": "right",
+      "label": "corrente"
+    },
+    {
+      "id": "s7",
+      "fromNode": "ntc",
+      "toNode": "afe",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "label": "temperatura"
+    },
+    {
+      "id": "s8",
+      "fromNode": "afe",
+      "toNode": "esp32",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "telemetria"
+    },
+    {
+      "id": "s9",
+      "fromNode": "esp32",
+      "toNode": "state-machine",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "executa"
+    },
+    {
+      "id": "s10",
+      "fromNode": "state-machine",
+      "toNode": "fault-handling",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "transicoes seguras"
+    },
+    {
+      "id": "s11",
+      "fromNode": "config",
+      "toNode": "state-machine",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "limites"
+    },
+    {
+      "id": "s12",
+      "fromNode": "config",
+      "toNode": "fault-handling",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "regras"
+    },
+    {
+      "id": "s13",
+      "fromNode": "config",
+      "toNode": "afe",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "label": "medicao"
+    },
+    {
+      "id": "s14",
+      "fromNode": "esp32",
+      "toNode": "charge-fet",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "label": "controle"
+    },
+    {
+      "id": "s15",
+      "fromNode": "esp32",
+      "toNode": "discharge-fet",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "label": "controle"
+    }
+  ]
+}

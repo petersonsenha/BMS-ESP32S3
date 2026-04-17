@@ -1,0 +1,204 @@
+{
+  "nodes": [
+    {
+      "id": "group-req",
+      "type": "group",
+      "x": -80,
+      "y": -80,
+      "width": 1960,
+      "height": 1100,
+      "color": "3",
+      "label": "Mapa de Requisitos"
+    },
+    {
+      "id": "idx-req",
+      "type": "file",
+      "file": "knowledge/00-MOCs/Indice-Por-Requisito.md",
+      "x": 80,
+      "y": 80,
+      "width": 340,
+      "height": 220,
+      "color": "4"
+    },
+    {
+      "id": "req-ov",
+      "type": "file",
+      "file": "knowledge/60-Requisitos/REQ-PROT-OV.md",
+      "x": 500,
+      "y": 60,
+      "width": 280,
+      "height": 170,
+      "color": "2"
+    },
+    {
+      "id": "req-uv",
+      "type": "file",
+      "file": "knowledge/60-Requisitos/REQ-PROT-UV.md",
+      "x": 820,
+      "y": 60,
+      "width": 280,
+      "height": 170,
+      "color": "3"
+    },
+    {
+      "id": "req-oc",
+      "type": "file",
+      "file": "knowledge/60-Requisitos/REQ-PROT-OC.md",
+      "x": 1140,
+      "y": 60,
+      "width": 280,
+      "height": 170,
+      "color": "1"
+    },
+    {
+      "id": "req-ot",
+      "type": "file",
+      "file": "knowledge/60-Requisitos/REQ-PROT-OT.md",
+      "x": 1460,
+      "y": 60,
+      "width": 280,
+      "height": 170,
+      "color": "2"
+    },
+    {
+      "id": "req-fs",
+      "type": "file",
+      "file": "knowledge/60-Requisitos/REQ-FAIL-001.md",
+      "x": 660,
+      "y": 340,
+      "width": 320,
+      "height": 180,
+      "color": "6"
+    },
+    {
+      "id": "req-bal",
+      "type": "file",
+      "file": "knowledge/60-Requisitos/REQ-BAL-001.md",
+      "x": 1020,
+      "y": 340,
+      "width": 320,
+      "height": 180,
+      "color": "4"
+    },
+    {
+      "id": "req-state",
+      "type": "file",
+      "file": "knowledge/60-Requisitos/REQ-STATE-001.md",
+      "x": 1380,
+      "y": 340,
+      "width": 320,
+      "height": 180,
+      "color": "5"
+    },
+    {
+      "id": "fh",
+      "type": "file",
+      "file": "knowledge/40-Firmware/Fault-Handling.md",
+      "x": 760,
+      "y": 690,
+      "width": 320,
+      "height": 180,
+      "color": "5"
+    },
+    {
+      "id": "states",
+      "type": "file",
+      "file": "knowledge/40-Firmware/Maquina-de-Estados.md",
+      "x": 1160,
+      "y": 690,
+      "width": 320,
+      "height": 180,
+      "color": "6"
+    }
+  ],
+  "edges": [
+    {
+      "id": "r1",
+      "fromNode": "idx-req",
+      "toNode": "req-ov",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "r2",
+      "fromNode": "idx-req",
+      "toNode": "req-uv",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "r3",
+      "fromNode": "idx-req",
+      "toNode": "req-oc",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "r4",
+      "fromNode": "idx-req",
+      "toNode": "req-ot",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "r5",
+      "fromNode": "req-ov",
+      "toNode": "fh",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "r6",
+      "fromNode": "req-uv",
+      "toNode": "fh",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "r7",
+      "fromNode": "req-oc",
+      "toNode": "fh",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "r8",
+      "fromNode": "req-ot",
+      "toNode": "fh",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "r9",
+      "fromNode": "req-fs",
+      "toNode": "states",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "guarda"
+    },
+    {
+      "id": "r10",
+      "fromNode": "req-bal",
+      "toNode": "states",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "regra"
+    },
+    {
+      "id": "r11",
+      "fromNode": "req-state",
+      "toNode": "states",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "estrutura"
+    },
+    {
+      "id": "r12",
+      "fromNode": "fh",
+      "toNode": "states",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "consolida"
+    }
+  ]
+}

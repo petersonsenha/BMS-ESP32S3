@@ -39,13 +39,13 @@ Tecnicas de protecao que merecem prioridade neste projeto:
 
 Detalhamento das tecnicas de protecao:
 
-- [docs/protecao-bms.md](/C:/Users/peter/Documents/GitHub/BMS-ESP32S3/docs/protecao-bms.md)
-- [docs/arquitetura-bms-4s.md](/C:/Users/peter/Documents/GitHub/BMS-ESP32S3/docs/arquitetura-bms-4s.md)
-- [docs/maquina-de-estados-bms.md](/C:/Users/peter/Documents/GitHub/BMS-ESP32S3/docs/maquina-de-estados-bms.md)
-- [docs/afe-em-bms.md](/C:/Users/peter/Documents/GitHub/BMS-ESP32S3/docs/afe-em-bms.md)
-- [docs/obsidian-vault-bms.md](/C:/Users/peter/Documents/GitHub/BMS-ESP32S3/docs/obsidian-vault-bms.md)
-- [docs/monografia-tcc-abnt.md](/C:/Users/peter/Documents/GitHub/BMS-ESP32S3/docs/monografia-tcc-abnt.md)
-- [tcc-latex/main.tex](/C:/Users/peter/Documents/GitHub/BMS-ESP32S3/tcc-latex/main.tex)
+- [docs/protecao-bms.md](protecao-bms.md)
+- [docs/arquitetura-bms-4s.md](arquitetura-bms-4s.md)
+- [docs/maquina-de-estados-bms.md](maquina-de-estados-bms.md)
+- [docs/afe-em-bms.md](afe-em-bms.md)
+- [docs/obsidian-vault-bms.md](../conhecimento/obsidian-vault-bms.md)
+- [docs/monografia-tcc-abnt.md](../academico/monografia-tcc-abnt.md)
+- [tcc-latex/main.tex](../assets/tcc-latex/main.tex)
 
 ## Referencias Visuais
 
@@ -90,7 +90,7 @@ enquanto um AFE dedicado faz a medicao segura das celulas e apoia a protecao pri
 
 Detalhes da arquitetura eletrica:
 
-- [docs/arquitetura-bms-4s.md](/C:/Users/peter/Documents/GitHub/BMS-ESP32S3/docs/arquitetura-bms-4s.md)
+- [docs/arquitetura-bms-4s.md](arquitetura-bms-4s.md)
 
 ## Estrutura do firmware
 
@@ -111,7 +111,7 @@ Esta primeira base ja contem:
 
 Documentacao da maquina de estados:
 
-- [docs/maquina-de-estados-bms.md](/C:/Users/peter/Documents/GitHub/BMS-ESP32S3/docs/maquina-de-estados-bms.md)
+- [docs/maquina-de-estados-bms.md](maquina-de-estados-bms.md)
 
 ## Site da documentacao
 

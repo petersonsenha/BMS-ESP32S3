@@ -1,0 +1,177 @@
+\documentclass[
+  12pt,
+  oneside,
+  openright,
+  a4paper,
+  english,
+  brazil
+]{abntex2}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{indentfirst}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{siunitx}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage[brazilian,hyperpageref]{backref}
+\usepackage[alf]{abntex2cite}
+
+\title{Desenvolvimento de uma BMS 4S com ESP32-S3 para monitoramento, proteção e balanceamento de baterias de lítio}
+\author{Seu Nome Completo}
+\local{Sua Cidade}
+\date{2026}
+
+\instituicao{%
+  Nome da Universidade\\
+  Nome do Centro ou Faculdade\\
+  Nome do Curso
+}
+
+\tipotrabalho{Trabalho de Conclusão de Curso}
+\preambulo{Monografia apresentada ao curso de X da Y como requisito parcial para obtenção do título de Z.}
+
+\orientador{Prof. Nome do Orientador}
+\coorientador{Prof. Nome do Coorientador}
+
+\hypersetup{
+  pdftitle={\thetitle},
+  pdfauthor={\theauthor},
+  pdfsubject={BMS 4S com ESP32-S3},
+  pdfcreator={LaTeX com abnTeX2},
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  urlcolor=blue
+}
+
+\makeindex
+
+\begin{document}
+\selectlanguage{brazil}
+\frenchspacing
+
+\pretextual
+
+\imprimircapa
+\imprimirfolhaderosto*
+
+% Ficha catalografica:
+% Substitua este bloco pela ficha emitida pela biblioteca da sua instituicao, se exigido.
+% \begin{fichacatalografica}
+%   \vspace*{\fill}
+%   \hrule
+%   \begin{center}
+%     Ficha catalografica fornecida pela biblioteca
+%   \end{center}
+%   \hrule
+% \end{fichacatalografica}
+
+% Folha de aprovacao:
+% Recomenda-se adaptar ao modelo institucional.
+% \begin{folhadeaprovacao}
+%   \begin{center}
+%     \ABNTEXchapterfont\large\imprimirautor
+%   \end{center}
+%   \vspace*{\fill}\vspace*{\fill}
+%   \begin{center}
+%     \ABNTEXchapterfont\bfseries\large\imprimirtitulo
+%   \end{center}
+%   \vspace*{\fill}
+%   \hspace{.45\textwidth}
+%   \begin{minipage}{.5\textwidth}
+%     \imprimirpreambulo
+%   \end{minipage}
+%   \vspace*{\fill}
+%   Trabalho aprovado. \imprimirlocal, \imprimirdata:
+%   \assinatura{\textbf{\imprimirorientador} \\ Orientador}
+% \end{folhadeaprovacao}
+
+\begin{resumo}
+Este trabalho apresenta a proposta de desenvolvimento de um sistema de gerenciamento de baterias
+para um pack de lítio em configuração \textit{4S}, utilizando um microcontrolador ESP32-S3 como
+elemento de supervisão, telemetria e controle de alto nível. A pesquisa aborda os requisitos de
+proteção do pack, a necessidade do uso de um \textit{Analog Front End} para medição segura das
+células, a definição da máquina de estados da BMS e a organização do firmware para tratamento de
+falhas, balanceamento passivo e configuração do sistema. A metodologia combina revisão bibliográfica,
+análise de arquiteturas de mercado, modelagem da solução e estruturação de uma base inicial de
+firmware e documentação técnica. Como resultado, propõe-se uma arquitetura coerente para uma BMS
+4S com foco em proteção, expansibilidade e futura implementação em placa dedicada.
+
+\textbf{Palavras-chave}: BMS. ESP32-S3. AFE. Bateria de lítio. Balanceamento. Proteção.
+\end{resumo}
+
+\begin{resumo}[Abstract]
+\begin{otherlanguage*}{english}
+This work presents the development proposal of a battery management system for a \textit{4S}
+lithium battery pack, using an ESP32-S3 microcontroller as the high-level supervision, telemetry,
+and control element. The study addresses pack protection requirements, the need for an
+\textit{Analog Front End} for safe cell measurement, the definition of the BMS state machine,
+and the firmware organization for fault handling, passive balancing, and system configuration.
+The methodology combines bibliographic review, analysis of market architectures, solution modeling,
+and the structuring of an initial firmware and technical documentation base. As a result, a
+coherent architecture for a 4S BMS is proposed, focused on protection, expandability, and future
+implementation on a dedicated printed circuit board.
+
+\textbf{Keywords}: BMS. ESP32-S3. AFE. Lithium battery. Balancing. Protection.
+\end{otherlanguage*}
+\end{resumo}
+
+\pdfbookmark[0]{\contentsname}{toc}
+\tableofcontents*
+\cleardoublepage
+
+\textual
+
+\include{capitulos/01-introducao}
+\include{capitulos/02-fundamentacao-teorica}
+\include{capitulos/03-requisitos-e-metodologia}
+\include{capitulos/04-arquitetura-da-bms}
+\include{capitulos/05-desenvolvimento-do-sistema}
+\include{capitulos/06-resultados-e-discussao}
+\include{capitulos/07-conclusao}
+
+\postextual
+
+\bibliography{referencias}
+
+\begin{apendicesenv}
+\partapendices
+\chapter{Checklist para adaptação institucional}
+
+Antes da entrega final, recomenda-se validar:
+
+\begin{itemize}
+  \item modelo de capa da universidade;
+  \item exigência de folha de aprovação;
+  \item ficha catalográfica;
+  \item regras próprias para resumo, abstract e listas;
+  \item padrão institucional para referências e citações.
+\end{itemize}
+\end{apendicesenv}
+
+\begin{anexosenv}
+\partanexos
+\chapter{Estrutura atual da documentação do projeto}
+
+Os documentos técnicos do projeto podem ser usados como base para a redação do TCC:
+
+\begin{itemize}
+  \item \texttt{docs/arquitetura-bms-4s.md}
+  \item \texttt{docs/protecao-bms.md}
+  \item \texttt{docs/maquina-de-estados-bms.md}
+  \item \texttt{docs/afe-em-bms.md}
+  \item \texttt{config/bms\_config.json}
+\end{itemize}
+\end{anexosenv}
+
+\printindex
+
+\end{document}

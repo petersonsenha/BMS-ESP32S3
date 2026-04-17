@@ -1,0 +1,152 @@
+{
+  "nodes": [
+    {
+      "id": "group-bms",
+      "type": "group",
+      "x": -80,
+      "y": -80,
+      "width": 1620,
+      "height": 980,
+      "color": "5",
+      "label": "Mapa BMS 4S"
+    },
+    {
+      "id": "moc-bms",
+      "type": "file",
+      "file": "knowledge/00-MOCs/MOC-BMS.md",
+      "x": 80,
+      "y": 80,
+      "width": 320,
+      "height": 220,
+      "color": "4"
+    },
+    {
+      "id": "bms",
+      "type": "file",
+      "file": "knowledge/10-Conceitos/BMS.md",
+      "x": 460,
+      "y": 80,
+      "width": 300,
+      "height": 200,
+      "color": "4"
+    },
+    {
+      "id": "pack",
+      "type": "file",
+      "file": "knowledge/10-Conceitos/Bateria-4S.md",
+      "x": 820,
+      "y": 80,
+      "width": 300,
+      "height": 200,
+      "color": "3"
+    },
+    {
+      "id": "afe",
+      "type": "file",
+      "file": "knowledge/10-Conceitos/AFE.md",
+      "x": 820,
+      "y": 340,
+      "width": 300,
+      "height": 200,
+      "color": "2"
+    },
+    {
+      "id": "esp32",
+      "type": "file",
+      "file": "knowledge/10-Conceitos/ESP32-S3.md",
+      "x": 460,
+      "y": 340,
+      "width": 300,
+      "height": 200,
+      "color": "5"
+    },
+    {
+      "id": "states",
+      "type": "file",
+      "file": "knowledge/40-Firmware/Maquina-de-Estados.md",
+      "x": 460,
+      "y": 620,
+      "width": 320,
+      "height": 200,
+      "color": "6"
+    },
+    {
+      "id": "faults",
+      "type": "file",
+      "file": "knowledge/40-Firmware/Fault-Handling.md",
+      "x": 820,
+      "y": 620,
+      "width": 320,
+      "height": 200,
+      "color": "1"
+    },
+    {
+      "id": "note",
+      "type": "text",
+      "text": "# Como navegar\n\n- Comece em `MOC-BMS`\n- Siga para hardware, firmware e protecoes\n- Abra o grafo local de cada nota para explorar mais relacoes",
+      "x": 1180,
+      "y": 80,
+      "width": 280,
+      "height": 240,
+      "color": "5"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "fromNode": "moc-bms",
+      "toNode": "bms",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "centro"
+    },
+    {
+      "id": "e2",
+      "fromNode": "bms",
+      "toNode": "pack",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "supervisiona"
+    },
+    {
+      "id": "e3",
+      "fromNode": "bms",
+      "toNode": "esp32",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "controlador"
+    },
+    {
+      "id": "e4",
+      "fromNode": "pack",
+      "toNode": "afe",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "medicao por celula"
+    },
+    {
+      "id": "e5",
+      "fromNode": "esp32",
+      "toNode": "states",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "executa"
+    },
+    {
+      "id": "e6",
+      "fromNode": "states",
+      "toNode": "faults",
+      "fromSide": "right",
+      "toSide": "left",
+      "label": "responde a"
+    },
+    {
+      "id": "e7",
+      "fromNode": "afe",
+      "toNode": "faults",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "label": "sinaliza"
+    }
+  ]
+}

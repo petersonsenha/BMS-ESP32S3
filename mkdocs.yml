@@ -1,0 +1,138 @@
+site_name: BMS-ESP32S3
+site_description: Documentacao online da BMS 4S com ESP32-S3
+site_url: https://petersonsenha.github.io/BMS-ESP32S3/
+repo_url: https://github.com/petersonsenha/BMS-ESP32S3
+repo_name: petersonsenha/BMS-ESP32S3
+docs_dir: site_docs
+site_dir: site
+strict: true
+
+theme:
+  name: material
+  language: pt-BR
+  logo: material/battery-high
+  favicon: material/battery-heart-variant
+  icon:
+    repo: fontawesome/brands/github
+  font:
+    text: IBM Plex Sans
+    code: JetBrains Mono
+  features:
+    - navigation.instant
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.top
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+    - content.tabs.link
+    - toc.follow
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: amber
+      toggle:
+        icon: material/weather-night
+        name: Alternar para tema escuro
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: amber
+      toggle:
+        icon: material/weather-sunny
+        name: Alternar para tema claro
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+
+extra_css:
+  - assets/stylesheets/extra.css
+
+nav:
+  - Inicio: index.md
+  - Projeto:
+      - Visao geral: projeto/visao-geral.md
+      - Arquitetura 4S: projeto/arquitetura-bms-4s.md
+      - Tecnicas de protecao: projeto/protecao-bms.md
+      - Maquina de estados: projeto/maquina-de-estados-bms.md
+      - AFE em BMS: projeto/afe-em-bms.md
+      - Configuracao JSON: projeto/configuracao-json.md
+      - Publicacao no GitHub Pages: projeto/publicacao-github-pages.md
+  - Base de conhecimento:
+      - Visao geral: conhecimento/visao-geral.md
+      - Obsidian no projeto: conhecimento/obsidian-vault-bms.md
+      - Mapas relacionais: conhecimento/mapas-relacionais.md
+      - MOCs:
+          - Start Here: conhecimento/mocs/start-here.md
+          - MOC BMS: conhecimento/mocs/moc-bms.md
+          - MOC Hardware: conhecimento/mocs/moc-hardware.md
+          - MOC Protecoes: conhecimento/mocs/moc-protecoes.md
+          - MOC Firmware: conhecimento/mocs/moc-firmware.md
+          - MOC Testes: conhecimento/mocs/moc-testes.md
+          - Indice por componente: conhecimento/mocs/indice-por-componente.md
+          - Indice por requisito: conhecimento/mocs/indice-por-requisito.md
+          - Indice por configuracao: conhecimento/mocs/indice-por-configuracao.md
+      - Conceitos:
+          - BMS: conhecimento/conceitos/bms.md
+          - Bateria 4S: conhecimento/conceitos/bateria-4s.md
+          - ESP32-S3: conhecimento/conceitos/esp32-s3.md
+          - AFE: conhecimento/conceitos/afe.md
+          - Balanceamento passivo: conhecimento/conceitos/balanceamento-passivo.md
+      - Hardware:
+          - Esquematico logico: conhecimento/hardware/esquematico-logico-bms-4s.md
+          - Shunt: conhecimento/hardware/shunt.md
+          - NTC: conhecimento/hardware/ntc.md
+          - Fusivel: conhecimento/hardware/fusivel.md
+          - MOSFET de carga: conhecimento/hardware/mosfet-de-carga.md
+          - MOSFET de descarga: conhecimento/hardware/mosfet-de-descarga.md
+      - Protecoes:
+          - Sobretensao: conhecimento/protecoes/sobretensao.md
+          - Subtensao: conhecimento/protecoes/subtensao.md
+          - Sobrecorrente: conhecimento/protecoes/sobrecorrente.md
+          - Curto-circuito: conhecimento/protecoes/curto-circuito.md
+          - Sobretemperatura: conhecimento/protecoes/sobretemperatura.md
+          - Fail-safe: conhecimento/protecoes/fail-safe.md
+      - Firmware:
+          - Configuracao BMS: conhecimento/firmware/configuracao-bms.md
+          - Maquina de estados: conhecimento/firmware/maquina-de-estados.md
+          - Fault handling: conhecimento/firmware/fault-handling.md
+          - Telemetria: conhecimento/firmware/telemetria.md
+      - Requisitos:
+          - Matriz de rastreabilidade: conhecimento/requisitos/matriz-rastreabilidade-configuracao.md
+          - REQ BAL 001: conhecimento/requisitos/req-bal-001.md
+          - REQ FAIL 001: conhecimento/requisitos/req-fail-001.md
+          - REQ PROT OV: conhecimento/requisitos/req-prot-ov.md
+          - REQ PROT UV: conhecimento/requisitos/req-prot-uv.md
+          - REQ PROT OC: conhecimento/requisitos/req-prot-oc.md
+          - REQ PROT OT: conhecimento/requisitos/req-prot-ot.md
+          - REQ STATE 001: conhecimento/requisitos/req-state-001.md
+      - Testes:
+          - Teste de bancada: conhecimento/testes/teste-de-bancada.md
+          - Casos de falha: conhecimento/testes/casos-de-falha.md
+  - Academico:
+      - TCC e ABNT: academico/monografia-tcc-abnt.md
+      - Template LaTeX: academico/template-latex.md
