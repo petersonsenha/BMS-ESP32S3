@@ -134,5 +134,6 @@ nav:
           - Teste de bancada: conhecimento/testes/teste-de-bancada.md
           - Casos de falha: conhecimento/testes/casos-de-falha.md
   - Academico:
+      - TCC do projeto: academico/tcc-do-projeto.md
       - TCC e ABNT: academico/monografia-tcc-abnt.md
       - Template LaTeX: academico/template-latex.md
