@@ -72,14 +72,21 @@ markdown_extensions:
 extra_css:
   - assets/stylesheets/extra.css
 
+extra_javascript:
+  - https://d3js.org/d3.v7.min.js
+  - assets/javascripts/d3-graphs.js
+
 nav:
   - Inicio: index.md
   - Projeto:
       - Visao geral: projeto/visao-geral.md
       - Arquitetura 4S: projeto/arquitetura-bms-4s.md
+      - Funcionamento da BMS: projeto/funcionamento-da-bms.md
       - Tecnicas de protecao: projeto/protecao-bms.md
       - Maquina de estados: projeto/maquina-de-estados-bms.md
+      - Diagnostico e eventos: projeto/diagnostico-e-eventos.md
       - AFE em BMS: projeto/afe-em-bms.md
+      - DoR e DoD: projeto/dor-e-dod.md
       - Configuracao JSON: projeto/configuracao-json.md
       - Publicacao no GitHub Pages: projeto/publicacao-github-pages.md
   - Base de conhecimento:

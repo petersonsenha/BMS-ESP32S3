@@ -3,7 +3,10 @@
     "series_cells": 4,
     "parallel_cells": 1,
     "chemistry": "li-ion",
-    "capacity_ah": 20.0
+    "capacity_ah": 20.0,
+    "nominal_cell_voltage_mv": 3700,
+    "full_cell_voltage_mv": 4200,
+    "empty_cell_voltage_mv": 3000
   },
   "measurement": {
     "afe_type": "to_be_defined",
@@ -24,15 +27,44 @@
     "charge_temp_min_deci_c": 0,
     "charge_temp_max_deci_c": 450,
     "discharge_temp_max_deci_c": 600,
+    "balance_start_mv": 4100,
+    "balance_delta_mv": 15,
     "afe_fault_is_critical": true,
     "short_circuit_hardware_cutoff_required": true,
     "fuse_required": true
   },
-  "balancing": {
-    "enabled": true,
-    "strategy": "passive",
-    "balance_start_mv": 4100,
-    "balance_delta_mv": 15
+  "fault_handling": {
+    "cell_voltage_hysteresis_mv": 25,
+    "current_hysteresis_ma": 400,
+    "temperature_hysteresis_deci_c": 20,
+    "short_circuit_discharge_ma": 18000,
+    "fault_latch_enabled": true,
+    "auto_recovery_enabled": false,
+    "fault_release_delay_ms": 3000,
+    "short_circuit_release_delay_ms": 10000
+  },
+  "operation": {
+    "activity_current_threshold_ma": 200,
+    "charge_termination_current_ma": 250,
+    "balance_max_pack_current_ma": 1500,
+    "balance_max_temperature_deci_c": 420,
+    "allow_balancing_while_charging": true,
+    "allow_balancing_in_idle": true,
+    "precharge_required": false,
+    "precharge_timeout_ms": 1500,
+    "precharge_target_delta_mv": 500
+  },
+  "estimation": {
+    "nominal_capacity_mah": 20000,
+    "nominal_cell_voltage_mv": 3700,
+    "full_cell_voltage_mv": 4200,
+    "empty_cell_voltage_mv": 3000,
+    "ocv_correction_idle_ms": 30000,
+    "ocv_correction_max_current_ma": 150,
+    "coulomb_efficiency_ppm": 995000,
+    "nominal_internal_resistance_milliohm": 18.0,
+    "minimum_soc_for_discharge_pct": 5.0,
+    "enable_ocv_correction": true
   },
   "outputs": {
     "charge_mosfet_enabled": true,

@@ -41,8 +41,11 @@ Detalhamento das tecnicas de protecao:
 
 - [docs/protecao-bms.md](protecao-bms.md)
 - [docs/arquitetura-bms-4s.md](arquitetura-bms-4s.md)
+- [docs/funcionamento-da-bms.md](funcionamento-da-bms.md)
 - [docs/maquina-de-estados-bms.md](maquina-de-estados-bms.md)
+- [docs/diagnostico-e-eventos.md](diagnostico-e-eventos.md)
 - [docs/afe-em-bms.md](afe-em-bms.md)
+- [docs/dor-e-dod.md](dor-e-dod.md)
 - [docs/obsidian-vault-bms.md](../conhecimento/obsidian-vault-bms.md)
 - [docs/monografia-tcc-abnt.md](../academico/monografia-tcc-abnt.md)
 - [tcc-latex/main.tex](../assets/tcc-latex/main.tex)
@@ -97,7 +100,8 @@ Detalhes da arquitetura eletrica:
 - `include/`: tipos, configuracao e interfaces
 - `src/`: logica da BMS, monitor mock e `main.cpp`
 - `platformio.ini`: ponto de partida para ESP32-S3 com PlatformIO
-- `config/bms_config.json`: configuracao base da BMS 4S
+- `config/bms_config.json`: fonte de verdade da configuracao da BMS 4S
+- `include/generated_bms_config.h`: header gerado automaticamente a partir do JSON
 - `knowledge/`: camada do Obsidian para mapas relacionais, MOCs, requisitos e Canvas
 
 ## Estado atual
@@ -105,8 +109,16 @@ Detalhes da arquitetura eletrica:
 Esta primeira base ja contem:
 
 - maquina de estados da BMS
-- verificacao de falhas principais
-- logica de balanceamento passivo
+- estado dedicado de `Precharge`
+- verificacao de falhas com histerese
+- latch de falha e politica de liberacao
+- deteccao explicita de `short-circuit` em descarga
+- logica de balanceamento passivo com janelas operacionais
+- base de `coulomb counting` com correcao por `OCV`
+- estimativas iniciais de `SOC`, `SOH`, `SOE`, `SOP` e `SOF`
+- camada de monitor para `AFE` real com fonte auxiliar de corrente e barramento
+- servico de override de configuracao via comandos de runtime
+- historico circular de eventos em memoria para diagnostico
 - modo mock para desenvolvimento sem placa pronta
 
 Documentacao da maquina de estados:
@@ -143,9 +155,52 @@ C:\Users\peter\AppData\Local\Programs\Python\Python313\python.exe -m mkdocs buil
 Antes de publicar no `GitHub Pages`, vale ajustar o `site_url` em `mkdocs.yml` com a URL final
 do repositorio publicado.
 
+## Operacao em runtime
+
+O firmware agora aceita comandos por `Serial` para ajustar a configuracao ativa sem recompilar.
+O servico foi montado sobre `Stream`, entao a mesma logica pode ser reutilizada depois por
+`BLE` serializado ou por um bridge `Wi-Fi`.
+
+Comandos principais:
+
+- `help`
+- `show-config`
+- `show-events`
+- `clear-events`
+- `clear-faults`
+- `set operation.precharge_required true`
+- `set operation.precharge_timeout_ms 2000`
+- `set protection.pack_over_current_discharge_ma 12000`
+
+O firmware tambem mantem um historico circular de eventos em memoria com:
+
+- boot
+- transicoes de estado
+- falhas levantadas e liberadas
+- mudancas na composicao das falhas
+- inicio, sucesso e timeout de `precharge`
+- correcao por `OCV`
+- mudancas de configuracao em runtime
+
+Detalhamento:
+
+- [docs/diagnostico-e-eventos.md](diagnostico-e-eventos.md)
+
+## Camada de AFE real
+
+O repositorio agora separa:
+
+- `AfeDriver`: leitura de celulas e temperatura do AFE
+- `AuxiliaryMeasurementSource`: corrente do shunt e tensao do barramento de saida
+- `AfeBatteryMonitor`: composicao dos dois em um `BatteryMonitor`
+
+Por padrao o projeto continua em `mock`, mas o build ja aceita trocar para a trilha real com
+`BMS_USE_AFE_MONITOR=1`.
+
 ## Proximos passos
 
 1. escolher o AFE real da placa
-2. trocar o monitor mock por um driver de hardware
-3. definir o esquema dos MOSFETs, shunt e NTCs
-4. adicionar persistencia, telemetria e testes de bancada
+2. adaptar o scaffold de driver para o AFE final selecionado
+3. definir o esquema dos MOSFETs, shunt, pre-charge e NTCs
+4. expandir o override de configuracao para BLE/Wi-Fi, se necessario
+5. adicionar log persistente, exportacao de eventos e testes de bancada

@@ -159,18 +159,25 @@ A base atual do repositorio ja contempla:
 - deteccao de subtensao por celula
 - sobrecorrente de carga
 - sobrecorrente de descarga
+- deteccao explicita de `SCD` no firmware
 - bloqueio por temperatura de carga
 - bloqueio por temperatura de descarga
 - falha de AFE
-- balanceamento passivo simples
+- histerese de tensao, corrente e temperatura
+- latch de falha com politica de liberacao
+- timeout de `precharge`
+- balanceamento passivo com janela de corrente e temperatura
+- janela de repouso para correcao por `OCV`
+- historico circular de eventos em memoria para diagnostico de faults e transicoes
+- comandos de `show-events`, `clear-events` e `clear-faults` por `Serial`
 
 ## 9. O que ainda vale adicionar depois
 
 Evolucoes importantes para versoes futuras:
 
 1. protecao de curto com temporizacao em hardware
-2. histerese e temporizacao por falha
-3. estados latched com politica de recuperacao
-4. estimativa de SOC e SOH
-5. pre-charge
-6. log persistente de eventos de falha
+2. log persistente de eventos de falha
+3. expandir a limpeza de falha para interfaces externas alem da `Serial`
+4. pre-charge com hardware validado em bancada
+5. validacao de tempos de resposta em bancada
+6. refinamento do `SOH` com dados reais de capacidade e resistencia

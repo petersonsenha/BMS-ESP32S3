@@ -47,9 +47,12 @@ def build_markdown_map() -> dict[Path, Path]:
         README_SOURCE.resolve(): Path("projeto/visao-geral.md"),
         (ROOT / "knowledge" / "README.md").resolve(): Path("conhecimento/visao-geral.md"),
         (ROOT / "docs" / "arquitetura-bms-4s.md").resolve(): Path("projeto/arquitetura-bms-4s.md"),
+        (ROOT / "docs" / "funcionamento-da-bms.md").resolve(): Path("projeto/funcionamento-da-bms.md"),
         (ROOT / "docs" / "protecao-bms.md").resolve(): Path("projeto/protecao-bms.md"),
         (ROOT / "docs" / "maquina-de-estados-bms.md").resolve(): Path("projeto/maquina-de-estados-bms.md"),
+        (ROOT / "docs" / "diagnostico-e-eventos.md").resolve(): Path("projeto/diagnostico-e-eventos.md"),
         (ROOT / "docs" / "afe-em-bms.md").resolve(): Path("projeto/afe-em-bms.md"),
+        (ROOT / "docs" / "dor-e-dod.md").resolve(): Path("projeto/dor-e-dod.md"),
         (ROOT / "docs" / "obsidian-vault-bms.md").resolve(): Path("conhecimento/obsidian-vault-bms.md"),
         (ROOT / "docs" / "monografia-tcc-abnt.md").resolve(): Path("academico/monografia-tcc-abnt.md"),
     }
@@ -70,9 +73,17 @@ STATIC_FILE_MAP: dict[Path, Path] = {
     (ROOT / "config" / "bms_config.json").resolve(): Path("assets/downloads/bms_config.json"),
     (ROOT / "src" / "bms_controller.cpp").resolve(): Path("assets/codigo-fonte/bms_controller.cpp"),
     (ROOT / "include" / "bms_types.h").resolve(): Path("assets/codigo-fonte/bms_types.h"),
+    (ROOT / "include" / "generated_bms_config.h").resolve(): Path("assets/codigo-fonte/generated_bms_config.h"),
+    (ROOT / "include" / "bms_event_log.h").resolve(): Path("assets/codigo-fonte/bms_event_log.h"),
+    (ROOT / "src" / "bms_runtime_config_service.cpp").resolve(): Path("assets/codigo-fonte/bms_runtime_config_service.cpp"),
+    (ROOT / "src" / "bms_event_log.cpp").resolve(): Path("assets/codigo-fonte/bms_event_log.cpp"),
+    (ROOT / "src" / "afe_battery_monitor.cpp").resolve(): Path("assets/codigo-fonte/afe_battery_monitor.cpp"),
+    (ROOT / "src" / "bq769x_afe_driver.cpp").resolve(): Path("assets/codigo-fonte/bq769x_afe_driver.cpp"),
+    (ROOT / "src" / "main.cpp").resolve(): Path("assets/codigo-fonte/main.cpp"),
     (ROOT / "mkdocs.yml").resolve(): Path("assets/site/mkdocs.yml"),
     (ROOT / ".github" / "workflows" / "github-pages.yml").resolve(): Path("assets/site/github-pages.yml"),
     (ROOT / "scripts" / "build_site_docs.py").resolve(): Path("assets/site/build_site_docs.py"),
+    (ROOT / "scripts" / "generate_bms_config_header.py").resolve(): Path("assets/site/generate_bms_config_header.py"),
     (ROOT / "requirements-docs.txt").resolve(): Path("assets/site/requirements-docs.txt"),
 }
 
@@ -533,9 +544,9 @@ versionavel e facil de alinhar com firmware, requisitos e validacao.
 - `pack`: define topologia do pack e capacidade nominal
 - `measurement`: escolhe o AFE, interface e estrategia de medicao
 - `protection`: concentra limites eletricos e termicos criticos
-- `balancing`: habilita e parametriza o balanceamento passivo
-- `outputs`: explicita o controle dos caminhos de carga e descarga
-- `telemetry`: padroniza sinal de corrente e intervalo de log
+- `fault_handling`: define histerese, latch e politica de liberacao de falha
+- `operation`: concentra limiares operacionais de carga, descarga e balanceamento
+- `estimation`: define a base de `SOC`, `SOE`, `SOH`, `SOP` e `SOF`
 
 ## Arquivo atual
 
@@ -548,11 +559,18 @@ versionavel e facil de alinhar com firmware, requisitos e validacao.
 - o projeto assume `{config["pack"]["series_cells"]}S` com `{config["pack"]["parallel_cells"]}P`
 - o AFE ainda esta como `to_be_defined`, o que combina com a fase atual de arquitetura
 - a protecao de curto em hardware segue marcada como obrigatoria
+- o `PlatformIO` gera `include/generated_bms_config.h` antes do build a partir deste JSON
+- o firmware aceita override em runtime via um servico de comandos baseado em `Stream`
 - o JSON deve permanecer alinhado com a [matriz de rastreabilidade](../conhecimento/requisitos/matriz-rastreabilidade-configuracao.md)
 
 ## Downloads
 
 - [Baixar bms_config.json](../assets/downloads/bms_config.json)
+- [Header gerado para o firmware](../assets/codigo-fonte/generated_bms_config.h)
+- [Servico de runtime config](../assets/codigo-fonte/bms_runtime_config_service.cpp)
+- [Camada de monitor para AFE](../assets/codigo-fonte/afe_battery_monitor.cpp)
+- [Scaffold de driver BQ769x](../assets/codigo-fonte/bq769x_afe_driver.cpp)
+- [Script gerador da configuracao](../assets/site/generate_bms_config_header.py)
 - [Abrir a nota de configuracao](../conhecimento/firmware/configuracao-bms.md)
 """
 

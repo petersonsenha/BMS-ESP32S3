@@ -18,6 +18,7 @@ Os estados definidos no firmware sao:
 
 - `Startup`
 - `Idle`
+- `Precharge`
 - `Charging`
 - `Discharging`
 - `Balancing`
@@ -32,17 +33,19 @@ A cada ciclo de controle, a BMS faz:
 3. decide se existe pedido de balanceamento
 4. resolve o estado pedido pela logica
 5. aplica guardas de seguranca do estado
-6. publica um snapshot com estado, saidas e metricas associadas
+6. atualiza o estimador de estado da bateria
+7. publica um snapshot com estado, saidas e metricas associadas
 
 ## Prioridade de decisao
 
 A prioridade atual de resolucao e:
 
 1. `Fault`
-2. `Charging` ou `Balancing` quando houver corrente de carga
-3. `Discharging`
-4. `Balancing` quando o pack estiver em repouso
-5. `Idle`
+2. `Precharge` quando a descarga foi pedida e o barramento ainda nao esta carregado
+3. `Charging` ou `Balancing` quando houver corrente de carga
+4. `Discharging`
+5. `Balancing` quando o pack estiver em repouso
+6. `Idle`
 
 O estado `Startup` e um guarda inicial. Na primeira atualizacao, a BMS segura as saidas em estado
 seguro e publica `Startup` como estado corrente. A partir do ciclo seguinte, ela entra no estado
@@ -56,9 +59,12 @@ stateDiagram-v2
     Startup --> Idle: primeira avaliacao valida
     Startup --> Fault: falha detectada
     Idle --> Charging: corrente < limiar negativo
+    Idle --> Precharge: descarga pedida com pre-charge obrigatorio
     Idle --> Discharging: corrente > limiar positivo
     Idle --> Balancing: delta de celulas acima do limite
     Idle --> Fault: qualquer falha
+    Precharge --> Discharging: barramento carregado
+    Precharge --> Fault: timeout ou qualquer falha
     Charging --> Balancing: balanceamento requerido
     Charging --> Idle: corrente abaixo do limiar
     Charging --> Fault: qualquer falha
@@ -106,6 +112,19 @@ Comportamento atual:
 - caminho de carga habilitado
 - balanceamento desligado enquanto nao houver pedido
 
+### `Precharge`
+
+Funcao:
+
+- carregar o barramento de saida por um caminho controlado antes de fechar a descarga principal
+
+Comportamento atual:
+
+- habilita a saida de `precharge`
+- mantem o caminho principal de descarga desligado
+- observa o delta entre `pack_voltage` e `output_voltage`
+- entra em `Fault` se o barramento nao atingir o delta alvo no tempo configurado
+
 ### `Discharging`
 
 Funcao:
@@ -140,6 +159,7 @@ Comportamento atual:
 - MOSFETs desligados
 - balanceamento desligado
 - operacao entra em modo seguro
+- falhas podem permanecer latched conforme a politica de recuperacao
 
 ## Structs que amarram estado e valores
 
@@ -181,6 +201,9 @@ Campos:
 - `discharging_detected`
 - `balancing_requested`
 - `fault_active`
+- `precharge_active`
+- `precharge_complete`
+- `precharge_timed_out`
 - `metrics`
 
 Uso principal:
@@ -197,6 +220,8 @@ Essa estrutura guarda os valores numericos associados ao ciclo atual:
 - `min_cell_voltage_mv`
 - `max_cell_voltage_mv`
 - `cell_voltage_delta_mv`
+- `output_voltage_mv`
+- `precharge_delta_mv`
 - `min_temperature_deci_c`
 - `max_temperature_deci_c`
 - `pack_current_ma`
@@ -215,11 +240,20 @@ O `BmsSnapshot` virou o ponto unico de observacao da BMS em cada ciclo.
 Ele agrupa:
 
 - `telemetry`
+- `raw_faults`
 - `faults`
 - `outputs`
 - `state_context`
 
 Isso facilita log, serializacao, testes e envio de telemetria para BLE, Wi-Fi ou CAN no futuro.
+
+Na base atual, o `BmsSnapshot` tambem alimenta um `BmsEventLog` em memoria, que registra:
+
+- mudancas de estado
+- faults levantadas, alteradas e liberadas
+- eventos de `precharge`
+- correcao por `OCV`
+- mudancas de configuracao em runtime
 
 ## Estrutura recomendada no firmware
 
@@ -240,8 +274,8 @@ Esse arranjo ajuda porque separa:
 
 Para uma maquina de estados mais madura, valem os proximos passos:
 
-1. adicionar histerese nas transicoes
-2. adicionar temporizacao minima por estado
-3. implementar falhas latched
-4. criar politicas claras de recuperacao do estado `Fault`
-5. registrar o motivo dominante da transicao
+1. adicionar temporizacao minima por estado
+2. separar `Fault` em falha bloqueante total e degradacao parcial de caminho
+3. registrar o motivo dominante da transicao
+4. persistir historico de eventos criticos para diagnostico pos-falha
+5. adicionar um criterio mais rico de pre-charge com medicao dedicada do barramento

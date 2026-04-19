@@ -65,6 +65,7 @@ Topologia minima:
 
 - MOSFET de carga
 - MOSFET de descarga
+- caminho ou resistor de `pre-charge`, se o barramento de saida tiver capacitancia relevante
 
 Opcional e recomendado em versoes futuras:
 
@@ -115,20 +116,28 @@ A base de firmware implementa:
 ## O que ja esta pronto no firmware
 
 - estruturas de telemetria para 4S
-- avaliacao de falhas principais
+- avaliacao de falhas com histerese e latch
+- deteccao de `short-circuit discharge`
 - habilitacao independente de MOSFET de carga e descarga
-- balanceamento passivo simples
+- estado de `Precharge` com observacao do barramento de saida
+- balanceamento passivo com janela operacional
+- base de state estimation com `coulomb counting + OCV`
+- geracao automatica do header de configuracao a partir do `bms_config.json`
+- servico de override de configuracao em runtime via `Stream`
+- camada de `BatteryMonitor` separada entre `AFE` e medicao auxiliar
+- historico circular de eventos em memoria para diagnostico e rastreio de faults
 - monitor mock para desenvolver sem hardware final
 - arquivo de configuracao JSON em `config/bms_config.json`
 
 ## O que falta para virar hardware real
 
 1. escolher o AFE real
-2. definir o mapa de pinos do ESP32-S3
-3. implementar o driver do AFE
-4. definir o estagio de potencia
+2. adaptar o scaffold de driver para o AFE final
+3. definir o mapa de pinos do ESP32-S3
+4. definir o estagio de potencia e a sequencia de pre-charge
 5. validar tempos de resposta e comportamento em falha
 6. testar em fonte limitada antes de conectar um pack real
+7. expandir o override de configuracao para BLE/Wi-Fi, se a aplicacao exigir
 
 ## Recomendacao de desenvolvimento
 
@@ -137,6 +146,6 @@ Sequencia segura para evoluir:
 1. fechar os requisitos eletricos da bateria 4S
 2. escolher o AFE e os MOSFETs
 3. desenhar o esquematico
-4. substituir o `MockBatteryMonitor` por um driver real
-5. instrumentar logs por serial e BLE
+4. adaptar o `AfeBatteryMonitor` e o scaffold de driver para o AFE final
+5. instrumentar exportacao de eventos por serial, BLE ou Wi-Fi
 6. fazer testes com fonte e cargas controladas

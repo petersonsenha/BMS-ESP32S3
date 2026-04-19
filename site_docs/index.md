@@ -57,6 +57,22 @@
 
   [Entrar no fluxo](projeto/maquina-de-estados-bms.md)
 
+- :material-timeline-text-outline: __Diagnostico__
+
+  ---
+
+  Eventos em memoria, comandos de runtime e rastreio do que aconteceu com a BMS a cada ciclo relevante.
+
+  [Ver eventos](projeto/diagnostico-e-eventos.md)
+
+- :material-chart-box-outline: __Funcionamento e entrega__
+
+  ---
+
+  Diagramas da BMS, metodos recomendados e painel de DoR e DoD para acompanhar maturidade.
+
+  [Ver painel](projeto/dor-e-dod.md)
+
 - :material-graph-outline: __Base de conhecimento__
 
   ---
@@ -87,10 +103,13 @@
 
 1. Comece por [Visao geral do projeto](projeto/visao-geral.md).
 2. Em seguida, passe por [Arquitetura BMS 4S](projeto/arquitetura-bms-4s.md) e [Tecnicas de protecao](projeto/protecao-bms.md).
-3. Se o foco for hardware, aprofunde em [AFE em BMS](projeto/afe-em-bms.md) e no [Esquematico logico](conhecimento/hardware/esquematico-logico-bms-4s.md).
-4. Se o foco for firmware, siga para [Maquina de estados](projeto/maquina-de-estados-bms.md) e [Configuracao JSON](projeto/configuracao-json.md).
-5. Para os mapas relacionais, abra [Mapas relacionais](conhecimento/mapas-relacionais.md).
-6. Para pesquisa ou TCC, siga para [TCC do projeto](academico/tcc-do-projeto.md), depois [TCC e ABNT](academico/monografia-tcc-abnt.md) e [Template LaTeX](academico/template-latex.md).
+3. Para entender a operacao do pack, leia [Funcionamento da BMS](projeto/funcionamento-da-bms.md).
+4. Se o foco for hardware, aprofunde em [AFE em BMS](projeto/afe-em-bms.md) e no [Esquematico logico](conhecimento/hardware/esquematico-logico-bms-4s.md).
+5. Se o foco for firmware, siga para [Maquina de estados](projeto/maquina-de-estados-bms.md) e [Configuracao JSON](projeto/configuracao-json.md).
+6. Para diagnostico de firmware e faults, abra [Diagnostico e eventos](projeto/diagnostico-e-eventos.md).
+7. Para governanca e criterio de maturidade, abra [DoR e DoD](projeto/dor-e-dod.md).
+8. Para os mapas relacionais, abra [Mapas relacionais](conhecimento/mapas-relacionais.md).
+9. Para pesquisa ou TCC, siga para [TCC do projeto](academico/tcc-do-projeto.md), depois [TCC e ABNT](academico/monografia-tcc-abnt.md) e [Template LaTeX](academico/template-latex.md).
 
 ## Destaques de engenharia
 
